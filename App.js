@@ -4,18 +4,16 @@ import {
 } from 'react-native';
 
 import Login from './screens/Login';
-
+import RootNavigation from './rootnavigation/RootNavigation';
 const {width,height}=Dimensions.get('screen')
 
 function App() {
  
   return (
-    <View >
-      <Login/> 
-    </View>
+    <>
+      <RootNavigation/> 
+    </>
   );
 }
-
-
 
 export default App;

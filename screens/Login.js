@@ -5,7 +5,7 @@ import {
 import TextBox from '../components/TextBox';
 import ImgButton from '../components/ImgButton';
 import Button from '../components/Button';
-
+import { useNavigation } from '@react-navigation/native';
 
 const {width,height}=Dimensions.get('screen')
 
@@ -77,6 +77,7 @@ function Login() {
   })
 
   const [code, setCode] = useState('+91')
+  const navigation=useNavigation()
 
   return (
     <View >
@@ -106,7 +107,7 @@ function Login() {
       </View>
 
       <View style={styles.ButttonView}>
-        <Button w='0.9' bg={'#71c0c8'} message={'Continue'} />
+        <Button w='0.9' bg={'#71c0c8'} message={'Continue'} onPress={()=>navigation.navigate('otp')}/>
       </View>
 
       <View style={styles.lineView}>
