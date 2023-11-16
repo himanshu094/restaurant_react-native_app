@@ -2,22 +2,20 @@ import { View ,Text,StyleSheet,Dimensions,Image,FlatList,TouchableOpacity} from 
 import Button from "../components/Button";
 import { useNavigation } from '@react-navigation/native';
 import { serverURL } from "../services/FetchNodeServices";
-
+import { useDispatch } from "react-redux";
 
 const {width,height}=Dimensions.get('screen');
 
 
-export default function FoodList(props) {
+export default function ShowBottomFood({item}) {
 
   const styles=StyleSheet.create({  
     listView:{
-      flexDirection:'row',
-      borderBlockColor:'#777',
-      borderTopWidth:0.45,
-      padding:5
+      flexDirection:'column',
+      paddingBottom:10
     },
     textView:{
-      width:width*0.53,
+      width:width,
       margin:5,
       flexDirection:'column' 
     },
@@ -54,29 +52,27 @@ export default function FoodList(props) {
       color:'#666',
     },
     imageView:{
-       width:width*0.43,
-      
-    }
+      justifyContent:'center'
+    },
+    
   })
 
   const navigation=useNavigation();
- 
-  const foodsList=[
-    {id:1,foodtype:'Veg',fooditemname:'Veg Biryani',price:200,offerprice:180,ratings:4,likes:123,icon:'vegpulao.jpg',ingrediants:'Rice, Seasional Vegitables, Biryani Masala, salt, oil, spices, curd, sugar, dry fruits'},
-    {id:2,foodtype:'Veg',fooditemname:'Malai Kofta',price:300,offerprice:260,ratings:4.8,likes:523,icon:'malaikofta.jpg',ingrediants:'paneer, Seasional Vegitables,  Masala'}
-    ]
+  const dispatch=useDispatch()
 
-  const showFoodList=({item})=>{
-
-      const handleClick=(food)=>{
-        props.setSelectedFood(food)
-        props.panelRef.current.togglePanel()
-      }
+  const handleSetOrder=(food)=>{
+    dispatch({type:'ADD_ORDER',payload:[food.id,item]});
+    navigation.navigate('cart')
+  }
+  
    
       return(
         <TouchableOpacity style={styles.listView}
-         onPress={()=>handleClick(item)}
          >
+
+          <View style={styles.imageView}>
+            <Image source={{uri:`${serverURL}/images/${item.icon}`}} style={{resizeMode:'cover',width:width*0.90,height:height*0.18,borderRadius:10}} /> 
+          </View>
 
           <View style={[styles.textView,{backgroundColor:'#fff'}]}>
             <Image source={{uri:`${serverURL}/images/${item.foodtype}.png`}} style={{resizeMode:'contain',width:20,height:20}} />
@@ -93,31 +89,13 @@ export default function FoodList(props) {
               <Text style={[styles.ratingText,{color:'#555'}]}>({item.likes})</Text>
             </View>
 
-            <Text numberOfLines={2} style={styles.ingrediants}>{item.ingrediants}</Text>
           </View>
           
-          <View style={styles.imageView}>
-            <Image source={{uri:`${serverURL}/images/${item.icon}`}} style={{resizeMode:'cover',width:width*0.40,height:height*0.18,borderRadius:10}} /> 
+          <View style={{justifyContent:'center',alignItems:'center'}}>
+              <Button w={0.6} bg={'#71c0c8'} message={'Add'} onPress={()=>handleSetOrder(item)} />
           </View>
 
         </TouchableOpacity>
       )
     
-  }
-
-  return (
-    <View style={styles.circleView}>
-
-      <View style={styles.headingText}>
-        <Text style={{letterSpacing:2,fontWeight:400}}>WHAT'S ON YOUR MIND?</Text>
-      </View>
-
-      <FlatList data={foodsList}
-       renderItem={showFoodList}
-       keyExtractor={item => item.id}
-       
-      />
-
-    </View>  
-  )
 }

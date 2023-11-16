@@ -11,6 +11,7 @@ import MCI from 'react-native-vector-icons/MaterialCommunityIcons'
 import Login from "../screens/Login";
 import Otp from "../screens/OTP";
 import Home from "../screens/Home";
+import Cart from "../screens/Cart";
 import ProductList from "../screens/ProductList";
 import AppHeader from "../components/AppHeader";
 
@@ -70,6 +71,7 @@ export default function RootNavigation(props){
         <Stack.Screen name="Home1"  component={ProjectDrawer} options={{header:AppHeader}}   />
         <Stack.Screen component={Login} name={"login"} options={{headerShown:false}} />
         <Stack.Screen component={Otp} name={"otp"} options={{headerShown:false}} />
+        <Stack.Screen component={Cart} name={"cart"} options={{headerShown:false}} />
         <Stack.Screen component={ProductList} name={"productlist"} options={{headerShown:true}} />
       </Stack.Navigator>
     </NavigationContainer>
