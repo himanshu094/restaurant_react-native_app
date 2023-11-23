@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   View,Text, Dimensions,Image,StyleSheet
 } from 'react-native';
@@ -6,6 +6,8 @@ import TextBox from '../components/TextBox';
 import ImgButton from '../components/ImgButton';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
+import { getStoreData,getKey,storeData } from "../storage/AsyncStroage";
+import { ScrollView } from 'react-native-gesture-handler';
 
 const {width,height}=Dimensions.get('screen')
 
@@ -77,7 +79,26 @@ function Login() {
   })
 
   const [code, setCode] = useState('+91')
+  const [mobileNumber,setMobileNumber]=useState()
+
   const navigation=useNavigation()
+  
+  const checkUserData=async()=>{
+    const userKey=await getKey();
+    console.log("ussser",userKey);
+    if(userKey){
+      navigation.navigate('otp')
+    }
+  }
+
+  const handleLogin=async()=>{
+    await storeData("USER",{"mobileno":mobileNumber})
+    navigation.navigate('otp')
+  }
+
+  useEffect(()=>{
+    checkUserData()
+  },[])
 
   return (
     <View >
@@ -103,11 +124,11 @@ function Login() {
 
       <View style={styles.inputView}>
         <ImgButton w='0.17' setCode={setCode} />
-        <TextBox w='0.7' h={45} message='Enter Phone Number' icon="" code={code} />
+        <TextBox onTextChange={()=>setMobileNumber()} w='0.7' h={45} type={'Numeric'} message='Enter Phone Number' icon="" code={code} />
       </View>
 
       <View style={styles.ButttonView}>
-        <Button w='0.9' bg={'#71c0c8'} message={'Continue'} onPress={()=>navigation.navigate('otp')}/>
+        <Button w='0.9' bg={'#71c0c8'} message={'Continue'}  onPress={(txt)=>handleLogin(txt)}/>
       </View>
 
       <View style={styles.lineView}>

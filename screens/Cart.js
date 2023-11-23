@@ -1,11 +1,11 @@
 import { View ,Text,StyleSheet,Dimensions,ScrollView} from "react-native";
-import Button from "../components/Button";import { useNavigation } from '@react-navigation/native';
-import FoodList from "../components/FoodList";
 import {  useState,useEffect } from "react";
 import EI from "react-native-vector-icons/Entypo"
 import FI from "react-native-vector-icons/Fontisto"
-import { FlatList } from "react-native-gesture-handler";
-import { serverURL } from "../services/FetchNodeServices";
+import { useSelector } from "react-redux";
+import Button from "../components/Button";
+import { useNavigation } from "@react-navigation/native";
+
 
 const {width,height}=Dimensions.get('screen');
 
@@ -37,20 +37,17 @@ export default function Cart(props) {
           shadowRadius:2,  
       },  
   })
+  
+  const cart = useSelector(state=>state.orderData);
+  const keys=Object.keys(cart);
+  const foodsList=Object.values(cart)
+  const navigation=useNavigation()
 
-  const foodsList=[
-    {id:1,foodtype:'Veg',fooditemname:'Veg Biryani',price:200,offerprice:180,ratings:4,likes:123,icon:'vegpulao.jpg',ingrediants:'Rice, Seasional Vegitables, Biryani Masala, salt, oil, spices, curd, sugar, dry fruits'},
-    {id:2,foodtype:'Veg',fooditemname:'Malai Kofta',price:300,offerprice:260,ratings:4.8,likes:523,icon:'malaikofta.jpg',ingrediants:'paneer, Seasional Vegitables,  Masala'}
-    ]
-
-  const [selectedFood,setSelectedFood]=useState({})
   const [discount,setDiscount]=useState(0);
   const [total,setTotal]=useState(0);
   const [deliveryFee,setDeliveryFee]=useState(0);
   const [deliveryTip,setDeliveryTip]=useState(0);
   const [platformFee,setplatformFee]=useState(0);
-  const [gst,setGst]=useState('');
-  const [netPrice,setNetPrice]=useState('');
 
   const calculate=()=>{
     setDiscount(foodsList.reduce((sum,item)=>{
@@ -64,8 +61,7 @@ export default function Cart(props) {
     setDeliveryFee(30)
     setDeliveryTip(7)
     setplatformFee(5)
-    setGst((total*5)/100);
-    setNetPrice(total+deliveryFee-discount+deliveryTip+platformFee+gst)
+    
   }
 
   useEffect(function(){
@@ -74,14 +70,14 @@ export default function Cart(props) {
 
   const showOrderedFood=()=>{
     return foodsList.map((item)=>{
-        return( <View >
+        return( <View key={item.fooditemid}>
  
            <View style={[styles.textView,{backgroundColor:'#fff',flexDirection:'row',justifyContent:'space-between'}]}>
              {/* <Image source={{uri:`${serverURL}/images/${item.foodtype}.png`}} style={{resizeMode:'contain',width:20,height:20}} /> */}
              <Text style={styles.title}>{item.fooditemname}</Text>
  
              <View style={{flexDirection:'row',marginVertical:5}}>
-               <Text style={styles.price}>&#8377;{item.price} </Text>
+               <Text style={[styles.price,{textDecorationLine:'line-through'}]}>&#8377;{item.price} </Text>
                <Text style={[styles.price,{marginLeft:8}]}>&#8377;{item.offerprice}</Text>
              </View>
 
@@ -172,12 +168,16 @@ export default function Cart(props) {
 
         <View style={{flexDirection:'row',justifyContent:'space-between',width:'100%'}}>  
           <Text style={{fontWeight:'bold',color:'#555',fontSize:15,}}>GST and Restaurant Charges</Text>
-          <Text style={{color:'#151515',fontWeight:'bold',fontSize:17}}>&#8377;{gst}</Text>
+          <Text style={{color:'#151515',fontWeight:'bold',fontSize:17}}>&#8377;{total*5/100}</Text>
         </View>
 
         <View style={{flexDirection:'row',justifyContent:'space-between',width:'100%',borderTopWidth:1,borderColor:'#777',paddingVertical:15,borderStyle:'dotted'}}>  
           <Text style={{fontWeight:'bold',color:'#151515',fontSize:17}}>To Pay</Text>
-          <Text style={{color:'#151515',fontWeight:'bold',fontSize:17}}>&#8377;{netPrice}</Text>
+          <Text style={{color:'#151515',fontWeight:'bold',fontSize:17}}>&#8377;{total+deliveryFee-discount+deliveryTip+platformFee+(total*5/100)}</Text>
+        </View>
+
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 10, width: width }} >
+                <Button onPress={()=>navigation.navigate('login')} w='0.8' bg={'red'} message={'Proceed to pay'} />
         </View>
 
       </View>

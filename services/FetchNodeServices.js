@@ -1,15 +1,15 @@
 import axios from "axios";
 
-var serverURL = "http://10.0.2.2:5000";
-//var serverURL = "http://192.168.29.4:8081";
+// var serverURL = "http://10.0.2.2:5000";
+var serverURL = "http://192.168.29.4:5000";
 
 const getData = async (url) => {
   try {
-    let headers = {};
-    if (localStorage.getItem("TOKEN")) {
-      headers = { headers: { Authorization: localStorage.getItem("TOKEN") } };
-    }
-    var response = await axios.get(`${serverURL}/${url}`, headers);
+    // let headers = {};
+    // if (localStorage.getItem("TOKEN")) {
+    //   headers = { headers: { Authorization: localStorage.getItem("TOKEN") } };
+    // }
+    var response = await axios.get(`${serverURL}/${url}`);
     var result = await response.data;
 
     return result;
@@ -23,12 +23,12 @@ const getData = async (url) => {
 
 const postData = async (url, body) => {
   try {
-    alert(localStorage.getItem("TOKEN"));
-    let headers = {};
-    if (localStorage.getItem("TOKEN")) {
-      headers = { headers: { Authorization: localStorage.getItem("TOKEN") } };
-    }
-    var response = await axios.post(`${serverURL}/${url}`, body, headers);
+  //  alert(localStorage.getItem("TOKEN"));
+    // let headers = {};
+    // if (localStorage.getItem("TOKEN")) {
+    //   headers = { headers: { Authorization: localStorage.getItem("TOKEN") } };
+    // }
+    var response = await axios.post(`${serverURL}/${url}`, body);
     var result = await response.data;
 
     return result;

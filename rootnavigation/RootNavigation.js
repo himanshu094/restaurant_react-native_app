@@ -71,7 +71,7 @@ export default function RootNavigation(props){
         <Stack.Screen name="Home1"  component={ProjectDrawer} options={{header:AppHeader}}   />
         <Stack.Screen component={Login} name={"login"} options={{headerShown:false}} />
         <Stack.Screen component={Otp} name={"otp"} options={{headerShown:false}} />
-        <Stack.Screen component={Cart} name={"cart"} options={{headerShown:false}} />
+        <Stack.Screen component={Cart} name={"cart"} options={{headerShown:true}} />
         <Stack.Screen component={ProductList} name={"productlist"} options={{headerShown:true}} />
       </Stack.Navigator>
     </NavigationContainer>

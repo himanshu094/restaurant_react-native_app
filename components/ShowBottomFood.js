@@ -7,15 +7,16 @@ import { useDispatch } from "react-redux";
 const {width,height}=Dimensions.get('screen');
 
 
-export default function ShowBottomFood({item}) {
+export default function ShowBottomFood({refresh,setRefresh,item}) {
 
   const styles=StyleSheet.create({  
     listView:{
       flexDirection:'column',
-      paddingBottom:10
+      paddingBottom:10,
+      
     },
     textView:{
-      width:width,
+      width:width*0.5,
       margin:5,
       flexDirection:'column' 
     },
@@ -61,8 +62,9 @@ export default function ShowBottomFood({item}) {
   const dispatch=useDispatch()
 
   const handleSetOrder=(food)=>{
-    dispatch({type:'ADD_ORDER',payload:[food.id,item]});
-    navigation.navigate('cart')
+    dispatch({type:'ADD_ORDER',payload:[item.fooditemid,item]});
+    setRefresh(!refresh)
+   // navigation.navigate('login')
   }
   
    
@@ -74,25 +76,28 @@ export default function ShowBottomFood({item}) {
             <Image source={{uri:`${serverURL}/images/${item.icon}`}} style={{resizeMode:'cover',width:width*0.90,height:height*0.18,borderRadius:10}} /> 
           </View>
 
-          <View style={[styles.textView,{backgroundColor:'#fff'}]}>
-            <Image source={{uri:`${serverURL}/images/${item.foodtype}.png`}} style={{resizeMode:'contain',width:20,height:20}} />
-            <Text style={styles.title}>{item.fooditemname}</Text>
+          <View style={{flexDirection:'row',marginVertical:5,marginLeft:5}}>
 
-            <View style={{flexDirection:'row',marginVertical:5}}>
-              <Text style={styles.price}>&#8377;{item.price} </Text>
-              <Text style={[styles.price,{marginLeft:8}]}>&#8377;{item.offerprice}</Text>
+            <View style={[styles.textView]}>
+              <Image source={{uri:`${serverURL}/images/${item.foodtype}.png`}} style={{resizeMode:'contain',width:20,height:20}} />
+              <Text style={styles.title}>{item.fooditemname}</Text>
+
+              <View style={{flexDirection:'row',marginVertical:5}}>
+                <Text style={styles.price}>&#8377;{item.price} </Text>
+                <Text style={[styles.price,{marginLeft:8}]}>&#8377;{item.offerprice}</Text>
+              </View>
+
+              <View style={{flexDirection:'row',marginVertical:5,alignItems:'center'}}>
+                <Image source={{uri:`${serverURL}/images/star.png`}} style={{resizeMode:'contain',width:13,height:13}} />
+                <Text style={styles.ratingText}> {4.5} </Text>
+                <Text style={[styles.ratingText,{color:'#555'}]}>({255})</Text>
+              </View>
+
             </View>
-
-            <View style={{flexDirection:'row',marginVertical:5,alignItems:'center'}}>
-              <Image source={{uri:`${serverURL}/images/star.png`}} style={{resizeMode:'contain',width:13,height:13}} />
-              <Text style={styles.ratingText}> {item.ratings} </Text>
-              <Text style={[styles.ratingText,{color:'#555'}]}>({item.likes})</Text>
+            
+            <View style={{width:width*0.4,marginTop:40}}>
+                <Button w={0.4} bg={'red'} message={'Add'} onPress={()=>handleSetOrder(item)} />
             </View>
-
-          </View>
-          
-          <View style={{justifyContent:'center',alignItems:'center'}}>
-              <Button w={0.6} bg={'#71c0c8'} message={'Add'} onPress={()=>handleSetOrder(item)} />
           </View>
 
         </TouchableOpacity>

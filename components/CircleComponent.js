@@ -1,6 +1,7 @@
 import { View ,Text,StyleSheet,Dimensions,Image,FlatList} from "react-native";
 import Button from "../components/Button";
 import { useNavigation } from '@react-navigation/native'
+import { serverURL } from "../services/FetchNodeServices";
 
 const {width,height}=Dimensions.get('screen');
 
@@ -39,16 +40,17 @@ export default function CircleComponent(props) {
 
   const navigation=useNavigation();
  
-  const foodList=[{id:1,name:'Poha',image:'burgur.png'},{id:2,name:'Samosa',image:'burgur.png'},{id:3,name:'Kachori',image:'burgur.png'},{id:4,name:'Pizza',image:'burgur.png'},{id:4,name:'Jalebi',image:'burgur.png'},{id:5,name:'Dhokla',image:'burgur.png'},{id:6,name:'Burgar',image:'burgur.png'}]
+  //const foodList=[{id:1,name:'Poha',image:'burgur.png'},{id:2,name:'Samosa',image:'burgur.png'},{id:3,name:'Kachori',image:'burgur.png'},{id:4,name:'Pizza',image:'burgur.png'},{id:4,name:'Jalebi',image:'burgur.png'},{id:5,name:'Dhokla',image:'burgur.png'},{id:6,name:'Burgar',image:'burgur.png'}]
 
   const showFoodList=(foodData)=>{
    
       return(
         <View style={styles.listView}>
           <View style={[styles.imageView,{backgroundColor:'#fff'}]}>
-            <Image source={require(`../assets/cb.png`)} style={{resizeMode:'contain',width:100,height:100}} />
+            <Image 
+            source={{uri:`${serverURL}/images/${foodData.item.icon}`}} style={{resizeMode:'contain',width:50,height:50}} />
           </View>
-          <Text style={styles.text}>{foodData.item.name}</Text>
+          <Text style={styles.text}>{foodData.item.categoryname}</Text>
         </View>
       )
     
@@ -61,9 +63,9 @@ export default function CircleComponent(props) {
         <Text style={{letterSpacing:2,fontWeight:400}}>WHAT'S ON YOUR MIND?</Text>
       </View>
 
-      <FlatList data={foodList}
+      <FlatList data={props.listFood}
        renderItem={showFoodList}
-       keyExtractor={item => item.id}
+       keyExtractor={item => item.categoryid}
        horizontal={true}
        scrollEnabled
        showsHorizontalScrollIndicator={false}
